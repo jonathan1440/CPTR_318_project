@@ -1,0 +1,44 @@
+Project pieces:
+	On RPi:
+	1. PSQL database
+	2. Protocol connecting database with UI
+	On an Android phone:
+	3. User Interface 
+
+Step 1 built using Django/Python
+Step 3 built using Unity
+
+
+UNITY PART
+	In calendar_ui directory
+	Using Unity 2018.2, 2D
+		- 2D instead of 3D so we can start simple
+	Using Visual Studio 2017
+	
+	Unity projects are organized by scene. Each scene can have associated GameObjects. 
+	I went ahead and started a CalendarView scene. It has Main Camera, Canvas, and EventSystem GameObjects.
+		- Main Camera: what the user sees when the scene is run
+		- Canvas: this is basically a plate you build all the visuals/other GameObjects off of
+		- EventSystem: this allows things like buttons to work
+	You can think of scenes like a web page. We'll probably need at least a "login" scene, a "create event" scene, and a "calendar view" scene.
+	When you create a new scene, always save it in the /calendar_ui/Assets/Scenes/
+	
+	GameObjects are fairly static. In order to make them change/move/interactable, you have to write a C# script.
+	Always store new scripts in /calendar_ui/Assets/Scripts/
+		
+	
+DATABASE PART
+	In database directory
+	Using PyCharm Pro 2018.2.4 (can get for free from JetBrains using your southern email)
+	Using Python 3.6.5
+		Make sure it's added to your PATH variable. You'll know you did it right if you can run "python" and "pip" in terminal.
+	Using PostgreSQL
+		Follow instructions here https://tutorial-extensions.djangogirls.org/en/optional_postgresql_installation/
+			Just install PSQL and the PSQL python package at the bottom of the page.
+			You shouldn't need to actually make a database though, just set up PSQL. I don't think you have to make an account.
+	***I've never used a db with git before, so I'm not even sure if its possible for you guys to access the database. This will probably be an issue I need to figure out before we're able to start hosting the database on the Raspberry Pi.		
+	I made a db called "calendar_db" with user "calendar_app" and password "password"
+	
+	Any time you want to do anything with the database, you'll first have to navigate to /CPTR_318_project/database/ in the terminal and run "virtenv\Scripts\activate"
+	The first time you do that, run "pip install django" to install the django library
+
