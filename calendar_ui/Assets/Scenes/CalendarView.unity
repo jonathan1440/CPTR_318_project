@@ -160,6 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   img: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   parent: {fileID: 274999102}
+  tfon: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &349572529
 GameObject:
   m_ObjectHideFlags: 0
