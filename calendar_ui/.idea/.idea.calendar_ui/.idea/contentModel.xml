@@ -6,9 +6,10 @@
     <e p="D:\SAU stuff\F18\Principles of Networking\CPTR_318_project\calendar_ui" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="DayLayout.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="CalendarLayout.cs" t="Include" />
+          <e p="date.cs" t="Include" />
+          <e p="DayLayout.cs" t="Include" />
         </e>
       </e>
       <e p="calendar_ui.sln" t="IncludeFlat" />
