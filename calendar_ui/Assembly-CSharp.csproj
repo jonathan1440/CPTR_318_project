@@ -57,13 +57,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\CalendarLayout.cs" />
-    <Compile Include="Assets\Scripts\CSVReader.cs" />
-    <Compile Include="Assets\Scripts\date.cs" />
-    <Compile Include="Assets\Scripts\DateObj.cs" />
-    <Compile Include="Assets\Scripts\DayLayout.cs" />
-    <Compile Include="Assets\Scripts\EventLayout.cs" />
-    <Compile Include="Assets\Scripts\scroll.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\CalendarLayout.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\CSVReader.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\date.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\DateObj.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\DayLayout.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\EventLayout.cs" />
+    <Compile Include="Assets\Scripts\CalendarView_scripts\scroll.cs" />
+    <Compile Include="Assets\Scripts\EditEvent_scripts\SaveEvent.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>D:/SAU stuff/F18/Principles of Networking/CPTR_318_project/calendar_ui/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>

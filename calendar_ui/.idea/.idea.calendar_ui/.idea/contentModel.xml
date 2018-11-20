@@ -7,13 +7,18 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
-          <e p="CalendarLayout.cs" t="Include" />
-          <e p="CSVReader.cs" t="Include" />
-          <e p="date.cs" t="Include" />
-          <e p="DateObj.cs" t="Include" />
-          <e p="DayLayout.cs" t="Include" />
-          <e p="EventLayout.cs" t="Include" />
-          <e p="scroll.cs" t="Include" />
+          <e p="CalendarView_scripts" t="Include">
+            <e p="CalendarLayout.cs" t="Include" />
+            <e p="CSVReader.cs" t="Include" />
+            <e p="date.cs" t="Include" />
+            <e p="DateObj.cs" t="Include" />
+            <e p="DayLayout.cs" t="Include" />
+            <e p="EventLayout.cs" t="Include" />
+            <e p="scroll.cs" t="Include" />
+          </e>
+          <e p="EditEvent_scripts" t="Include">
+            <e p="SaveEvent.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="calendar_ui.sln" t="IncludeFlat" />
