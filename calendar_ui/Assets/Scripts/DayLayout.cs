@@ -117,20 +117,13 @@ public class DayLayout : MonoBehaviour
 				DateObj.DateObject t = startDate + new DateObj.DateObject(0, 0, i);
 
 				children[i].text = t.ToString("D") + "\n" + t.ToString("d:mm:yy");
-
-				if (children[i].text == "Thursday\n1 Dec, 2018")
-				{
-					Debug.Log("stop");
-					Debug.Log("stop");
-				}
 			}
 
 
 			//update position of "today" marker
 			today = DateText.GetComponent<date>().today;
 			int x_pos = (today < startDate || today > startDate + new DateObj.DateObject(0, 0, 7))
-				? -2
-				: (today.day_of_the_week() - 1);
+				? -2 : (today.day_of_the_week() - 1);
 			gameObject.transform.Find("Today").transform.position = new Vector3(310f + x_pos * 388, 1222, 0);
 		}
 	}

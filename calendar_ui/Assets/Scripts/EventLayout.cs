@@ -10,6 +10,9 @@ public class EventLayout : MonoBehaviour
 	//Should be set to the DateText GameObject
 	public GameObject DateText;
 	
+	//should be set to the scrollbar
+	public GameObject scrollbar;
+	
 	private DateObj.DateObject startDate = new DateObj.DateObject(0,0,0);
 
 	private List<Dictionary<string, object>> events;
@@ -101,7 +104,7 @@ public class EventLayout : MonoBehaviour
 		
 		// I can't explain how or why this works
 		// but it has something to do with the event panel transforms being at their centers
-		return -858 - shour * 160.0f - (duration(start, end) - 160) / 2;
+		return -858 - shour * 160.0f - (duration(start, end) - 160) / 2 + 2714 * scrollbar.GetComponent<Scrollbar>().value;
 	}
 
 	private void create_text_go(string title, string text, int fontSize, FontStyle fStyle, Color tColor,
