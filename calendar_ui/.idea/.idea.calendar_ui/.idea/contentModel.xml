@@ -16,8 +16,14 @@
             <e p="EventLayout.cs" t="Include" />
             <e p="scroll.cs" t="Include" />
           </e>
+          <e p="CreateAccount_scripts" t="Include">
+            <e p="CreateAccount.cs" t="Include" />
+          </e>
           <e p="EditEvent_scripts" t="Include">
             <e p="SaveEvent.cs" t="Include" />
+          </e>
+          <e p="Login_scripts" t="Include">
+            <e p="login.cs" t="Include" />
           </e>
         </e>
       </e>

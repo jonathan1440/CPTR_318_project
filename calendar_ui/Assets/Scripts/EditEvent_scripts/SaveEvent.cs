@@ -258,6 +258,17 @@ public class SaveEvent : MonoBehaviour
 				EndTime.GetComponent<Image>().color = badData;
 			}
 		}
+		else
+		{
+			if(newEventData[0] == "")
+				Title.GetComponent<Image>().color = badData;
+			if(newEventData[1] == "")
+				Date.GetComponent<Image>().color = badData;
+			if(newEventData[2] == "")
+				StartTime.GetComponent<Image>().color = badData;
+			if(newEventData[3] == "")
+				EndTime.GetComponent<Image>().color = badData;
+		}
 	}
 
 	// used by the Cancel button
