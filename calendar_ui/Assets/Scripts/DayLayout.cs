@@ -19,10 +19,10 @@ public class DayLayout : MonoBehaviour
 	//should be set to Arial
 	public Font tfon;
 
-	private DateObj.DateObject startDate;
+	private DateObj.DateObject startDate = new DateObj.DateObject(0, 0, 0);
 	private DateObj.DateObject today;
 	// should be set to the DateText GameObject
-	public GameObject placeholder;
+	public GameObject DateText;
 	
 	// Use this for initialization
 	void Start () {
@@ -30,7 +30,7 @@ public class DayLayout : MonoBehaviour
 		for (int i = 0; i < 6; i++)
 		{
 			//make a GameObject named panel
-			GameObject a = new GameObject("Panel");
+			GameObject a = new GameObject("divider " + i);
 			
 			//add necessary components
 			a.AddComponent<RectTransform>();
@@ -46,8 +46,11 @@ public class DayLayout : MonoBehaviour
 
 			//set location
 			a.transform.SetParent(parent.transform);
-			a.transform.position = new Vector3(517 + i * 388, 1235, 0);
-			a.GetComponent<RectTransform>().sizeDelta = new Vector2(10, 156);
+			a.transform.position = new Vector3(-918 + i * 388, 1159, 0);
+			RectTransform art = a.GetComponent<RectTransform>();
+			art.sizeDelta = new Vector2(10, 124);
+			art.anchorMin = new Vector2(1, 1);
+			art.anchorMax = new Vector2(1, 1);
 		}
 		
 		//Make panel to highlight the current day
@@ -68,12 +71,15 @@ public class DayLayout : MonoBehaviour
 		//set location
 		b.transform.SetParent(parent.transform);
 		b.transform.position = new Vector3(322.5f, 1224, 0);
-		b.GetComponent<RectTransform>().sizeDelta = new Vector2(382, 120);
+		RectTransform brt = b.GetComponent<RectTransform>();
+		brt.sizeDelta = new Vector2(382, 120);
+		brt.anchorMin = new Vector2(1, 1);
+		brt.anchorMax = new Vector2(1, 1);
 		
 		string[] days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 		for (int i = 0; i < days.Length; i ++)
 		{
-			GameObject a = new GameObject("Text");
+			GameObject a = new GameObject(days[i]);
 
 			a.AddComponent<RectTransform>();
 			a.AddComponent<CanvasRenderer>();
@@ -87,25 +93,45 @@ public class DayLayout : MonoBehaviour
 			t.alignment = TextAnchor.UpperCenter;
 
 			a.transform.SetParent(parent.transform);
-			a.transform.position = new Vector3(324 + i * 388, 1216, 0);
-			a.GetComponent<RectTransform>().sizeDelta = new Vector2(398, 130);
+			a.transform.position = new Vector3(-1106 + i * 388, 1154, 0);
+			RectTransform art = a.GetComponent<RectTransform>();
+			art.sizeDelta = new Vector2(398, 130);
+			art.anchorMin = new Vector2(1, 1);
+			art.anchorMax = new Vector2(1, 1);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//get startDate from date.cs
-		startDate = placeholder.GetComponent<date>().display_date.week_start();
-		
-		Text[] children = gameObject.transform.GetComponentsInChildren<Text>(true);
-		for (int i = 0; i < children.Length; i ++)
-		{
-			DateObj.DateObject t = startDate + new DateObj.DateObject(0, 0, i);
-			
-			children[i].text = t.ToString("D") + "\n" + t.ToString("d:mm:yy");
-		}
+		DateObj.DateObject temp = DateText.GetComponent<date>().display_date;
 
-		today = placeholder.GetComponent<date>().today;
-		gameObject.transform.Find("Today").transform.position = new Vector3(322.5f + (today.day_of_the_week() - 1) * 388, 1224, 0);
+		if (temp != startDate)
+		{
+			startDate = temp;
+			
+			// set date text labels
+			Text[] children = gameObject.transform.GetComponentsInChildren<Text>(true);
+			for (int i = 0; i < children.Length; i++)
+			{
+				DateObj.DateObject t = startDate + new DateObj.DateObject(0, 0, i);
+
+				children[i].text = t.ToString("D") + "\n" + t.ToString("d:mm:yy");
+
+				if (children[i].text == "Thursday\n1 Dec, 2018")
+				{
+					Debug.Log("stop");
+					Debug.Log("stop");
+				}
+			}
+
+
+			//update position of "today" marker
+			today = DateText.GetComponent<date>().today;
+			int x_pos = (today < startDate || today > startDate + new DateObj.DateObject(0, 0, 7))
+				? -2
+				: (today.day_of_the_week() - 1);
+			gameObject.transform.Find("Today").transform.position = new Vector3(310f + x_pos * 388, 1222, 0);
+		}
 	}
 }

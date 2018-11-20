@@ -69,7 +69,12 @@ public class date : MonoBehaviour {
 	void Start ()
 	{
 		DateTime ct = DateTime.Now;
-		today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
+		
+		if (year != 0 && month != 0 && day != 0)
+			today = new DateObj.DateObject(year, month, day);
+		else
+			today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
+		
 		display_date = today.week_start();
 
 		GetComponent<Text>().text = today.ToString("d:M:Y");
@@ -85,7 +90,10 @@ public class date : MonoBehaviour {
 		
 		if (ct.Year != today.year || ct.Month != today.month || ct.Day != today.day)
 		{
-			today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
+			if (year != 0 && month != 0 && day != 0)
+				today = new DateObj.DateObject(year, month, day);
+			else
+				today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
 			
 			GetComponent<Text>().text = today.ToString("d:M:Y");
 		}

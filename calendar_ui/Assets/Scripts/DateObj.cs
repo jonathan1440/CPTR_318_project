@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
-using UnityEngine.Experimental.Rendering;
+﻿using UnityEngine;
 using System;
+using UnityEditor;
 
 public class DateObj : MonoBehaviour
 {
@@ -58,9 +55,8 @@ public class DateObj : MonoBehaviour
 		
 		public int day_of_the_week()
 		{
-			//total_days is # of days from 1/1/1 AD, and 1/1/1 was a Saturday, so...
-			int d = (total_days() + 1) % 7;
-			return d == 0 ? 7 : d;
+			DateTime d = new DateTime(year, month, day);
+			return ArrayUtility.IndexOf(days, d.DayOfWeek.ToString()) + 1;
 		}
 
 		public DateObject week_start()
@@ -68,6 +64,7 @@ public class DateObj : MonoBehaviour
 			return new DateObject(year, month, day + 1 - day_of_the_week());
 		}
 	
+		//constructor
 		public DateObject(int year, int month, int day)
 		{
 			//apparently it is only necessary to use this. when you have a parameter of the same name
@@ -164,15 +161,39 @@ public class DateObj : MonoBehaviour
 		{
 			return new DateObject(Math.Abs(A.year - B.year), A.month - B.month, A.day - B.day);
 		}
-	}
-	
-	// Use this for initialization
-	void Start () {
 		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+		public static bool operator == (DateObject A, DateObject B)
+		{
+			return A.year == B.year && A.month == B.month && A.day == B.day;
+		}
 		
+		public static bool operator != (DateObject A, DateObject B)
+		{
+			return A.year != B.year || A.month != B.month || A.day != B.day;
+		}
+		
+		public static bool operator > (DateObject A, DateObject B)
+		{
+			return A.year > B.year || 
+			       A.year == B.year && A.month > B.month ||
+				   A.year == B.year && A.month == B.month && A.day > B.day;
+		}
+		
+		public static bool operator < (DateObject A, DateObject B)
+		{
+			return A.year < B.year || 
+			       A.year == B.year && A.month < B.month ||
+			       A.year == B.year && A.month == B.month && A.day < B.day;
+		}
+
+		public static bool operator >=(DateObject A, DateObject B)
+		{
+			return A > B || A == B;
+		}
+		
+		public static bool operator <=(DateObject A, DateObject B)
+		{
+			return A < B || A == B;
+		}
 	}
 }

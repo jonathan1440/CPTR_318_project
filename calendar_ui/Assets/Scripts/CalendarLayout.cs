@@ -15,7 +15,7 @@ public class CalendarLayout : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// Instantiate time prefab to put hours and gridlines on the calendar
-		string[] txts = { "12a","1","2","3","4","5","6","7","8","9","10","11","12p","1","2","3","4","5","6","7","8","9","10","11","12a" }; 
+		string[] txts = { "","1a","2","3","4","5","6","7","8","9","10","11","12p","1","2","3","4","5","6","7","8","9","10","11","12a" }; 
 		for (int i = 0; i < txts.Length; i++)
 		{
 			GameObject a = Instantiate(hour, parent.transform.position, parent.transform.rotation);//new Vector3(-1393, 260 - i * 160, 40), Quaternion.identity);

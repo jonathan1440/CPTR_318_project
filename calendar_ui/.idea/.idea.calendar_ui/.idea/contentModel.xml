@@ -8,6 +8,7 @@
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
           <e p="CalendarLayout.cs" t="Include" />
+          <e p="CSVReader.cs" t="Include" />
           <e p="date.cs" t="Include" />
           <e p="DateObj.cs" t="Include" />
           <e p="DayLayout.cs" t="Include" />

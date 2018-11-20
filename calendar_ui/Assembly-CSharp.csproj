@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CalendarLayout.cs" />
+    <Compile Include="Assets\Scripts\CSVReader.cs" />
     <Compile Include="Assets\Scripts\date.cs" />
     <Compile Include="Assets\Scripts\DateObj.cs" />
     <Compile Include="Assets\Scripts\DayLayout.cs" />
