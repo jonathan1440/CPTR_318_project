@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
@@ -133,6 +135,17 @@ public class EventLayout : MonoBehaviour
 		ttrt.anchorMax = new Vector2(0, 1);
 	}
 
+	// to be called by the edit buttons
+	public void edit_button(/*string title, string date, string start_time, string end_time)*/Dictionary<string, object> event_details)
+	{
+		state.Title = event_details["title"].ToString();
+		state.Date = event_details["date"].ToString();
+		state.Start_time = event_details["start time"].ToString();
+		state.End_time = event_details["end time"].ToString();
+		
+		SceneManager.LoadScene("EditEvent");
+	}
+
 	private void draw_events()
 	{
 		//clear out previously displayed events
@@ -155,23 +168,24 @@ public class EventLayout : MonoBehaviour
 			float start_pix = start_spot(start_time, end_time);
 
 			int x_change = (date2.day_of_the_week() - 1) * 388;
+			float edit_button_l = 40f;
 			
 			//BACK PANEL
 			//init GameObject for the event
 			GameObject e = new GameObject("event " + i);
-			
+
 			//add necessary components
 			e.AddComponent<RectTransform>();
 			e.AddComponent<CanvasRenderer>();
 			e.AddComponent<Image>();
-			
+
 			//edit Image component
 			Image eimg = e.GetComponent<Image>();
 			eimg.sprite = img;
 			eimg.color = eventColors[i % eventColors.Length];
 			eimg.type = Image.Type.Sliced;
 			eimg.fillCenter = true;
-			
+
 			//set location
 			e.transform.SetParent(parent.transform);
 			e.transform.position = new Vector3(-1046 + x_change, start_pix, 0);
@@ -180,10 +194,47 @@ public class EventLayout : MonoBehaviour
 			ert.anchorMin = new Vector2(1, 1);
 			ert.anchorMax = new Vector2(1, 1);
 			
+
+			//EDIT BUTTON
+			GameObject b = new GameObject("edit");
+
+			//add necessary components
+			b.AddComponent<RectTransform>();
+			b.AddComponent<CanvasRenderer>();
+			b.AddComponent<Image>();
+			b.AddComponent<Button>();
+			
+			//set location
+			b.transform.SetParent(e.transform);
+			b.transform.position = new Vector3(310 + x_change - edit_button_l/2f, 1916 + start_pix, 0);
+			RectTransform brt = b.GetComponent<RectTransform>();
+			brt.sizeDelta = new Vector2(edit_button_l, edit_button_l);
+			brt.anchorMin = new Vector2(1, 1);
+			brt.anchorMax = new Vector2(1, 1);
+			
+			//edit Image component
+			Image bimg = b.GetComponent<Image>();
+			bimg.sprite = img;
+			bimg.color = new Color(1, 1, 1, 0.4f);
+			bimg.type = Image.Type.Sliced;
+			bimg.fillCenter = true;
+			
+			//edit text stuff
+			create_text_go("text", "✎", 35, FontStyle.Bold, Color.black, b, new Vector3(500 + x_change, 1871.25f + start_pix + min_duration/2 + edit_button_l/2, 0), new Vector2(edit_button_l, edit_button_l));
+			
+			//edit button.OnClick()
+			string[] nam = e.name.Split(' ');
+			int ind = Int32.Parse(nam[nam.Length-1]);
+			b.GetComponent<Button>().onClick.AddListener(delegate { edit_button(de[ind]); });
+			
+			
 			//TITLE TEXT
 			create_text_go("title text", de[i]["title"].ToString(), 40, FontStyle.Bold, Color.black, e,
-				new Vector3(500 + x_change, 1913.25f + start_pix, 0), new Vector2(380, 45.5f));
+				new Vector3(500 + x_change - edit_button_l / 2, 1913.25f + start_pix, 0),
+				new Vector2(380 - edit_button_l, 45.5f));
+			
 			//TIME TEXT
+			//if the event is long enough for there to be space on the event to show the time
 			if(min_duration / 160.0f >= 0.5f)
 				create_text_go("duration", de[i]["start time"] + " - " + de[i]["end time"], 30,
 					FontStyle.Normal, Color.black, e, new Vector3(500 + x_change, 1871.25f + start_pix, 0), new Vector2(380, 40));

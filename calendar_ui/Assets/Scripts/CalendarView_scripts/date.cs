@@ -41,6 +41,11 @@ public class date : MonoBehaviour {
 	//used by the Create event button
 	public void create_event()
 	{
+		state.Title = "Title";
+		state.Date = "Date (m/d/yyyy)";
+		state.Start_time = "Start time (11:30a)";
+		state.End_time = "End time (7:45p)";
+		
 		//link to edit event scene
 		SceneManager.LoadScene("EditEvent");
 	}

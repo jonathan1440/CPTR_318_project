@@ -238,9 +238,15 @@ public class SaveEvent : MonoBehaviour
 			if (shour <= ehour)
 			{
 				// send newEventData to to database with protocol
-				
-				
-				
+
+				if (state.Title != "Title")
+				{
+					// send data back with signal that it was edited
+				}
+				else
+				{
+					//send back normal data
+				}
 				
 				
 				
@@ -275,5 +281,33 @@ public class SaveEvent : MonoBehaviour
 	public void cancel()
 	{
 		SceneManager.LoadScene("CalendarView");
+	}
+
+	private void Start()
+	{
+		if (state.Title == "")
+		{
+			state.Title = "Title";
+		}
+
+		if (state.Date == "")
+		{
+			state.Date = "Date (m/d/yyyy)";
+		}
+
+		if (state.Start_time == "")
+		{
+			state.Start_time = "Start time (11:30a)";
+		}
+
+		if (state.End_time == "")
+		{
+			state.End_time = "End time (7:45p)";
+		}
+		
+		Title.GetComponentInChildren<Text>().text = state.Title;
+		Date.GetComponentInChildren<Text>().text = state.Date;
+		StartTime.GetComponentInChildren<Text>().text = state.Start_time;
+		EndTime.GetComponentInChildren<Text>().text = state.End_time;
 	}
 }

@@ -21,6 +21,7 @@
           </e>
           <e p="EditEvent_scripts" t="Include">
             <e p="SaveEvent.cs" t="Include" />
+            <e p="state.cs" t="Include" />
           </e>
           <e p="Login_scripts" t="Include">
             <e p="login.cs" t="Include" />
