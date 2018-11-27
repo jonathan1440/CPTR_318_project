@@ -53,6 +53,8 @@ public class date : MonoBehaviour {
 	//used by the Logout button
 	public void logout()
 	{
+		//terminate session/connection
+		
 		//link to login scene
 		SceneManager.LoadScene("Login");
 	}

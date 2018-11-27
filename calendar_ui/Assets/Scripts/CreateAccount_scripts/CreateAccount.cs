@@ -34,6 +34,9 @@ public class CreateAccount : MonoBehaviour {
 			}
 		}
 
+		if (val.Length > state.MaxUserPassLen)
+			bad = true;
+
 		return bad;
 	}
 
@@ -88,20 +91,21 @@ public class CreateAccount : MonoBehaviour {
 		//if all values have been supplied
 		if (ArrayUtility.IndexOf(newEventData, "") == -1)
 		{
-			// send newEventData to to database with protocol
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-			// *** ***
+			// send newEventData to database
+			state.Comm.SendNewUser(newEventData[0], newEventData[1]);
 
-			SceneManager.LoadScene("Login");
+			float t = 0;
+			while (t < state.Timeout && !state.SendNewUser.written)
+			{
+				t += Time.deltaTime;
+			}
+
+			if (state.SendNewUser.written && state.SendNewUser.data == "1")
+			{
+				state.SendNewUser.written = false;
+				
+				SceneManager.LoadScene("Login");
+			}
 		}
 		else
 		{
@@ -116,6 +120,9 @@ public class CreateAccount : MonoBehaviour {
 				Confirm.GetComponent<Image>().color = badData;
 			}
 		}
+		
+		// for bypassing the network
+		//SceneManager.LoadScene("Login");
 	}
 
 	// used by the Cancel button

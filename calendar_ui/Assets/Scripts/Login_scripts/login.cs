@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -71,21 +72,32 @@ public class login : MonoBehaviour {
 		//if all values have been supplied
 		if (ArrayUtility.IndexOf(newEventData, "") == -1)
 		{
-			// send newEventData to to database with protocol
+			// send newEventData to database with
+			state.Comm.RequestLoginAuth(newEventData[0], newEventData[1]);
 
+			float t = 0;
+			while (t < state.Timeout && !state.RequestLoginAuth.written)
+			{
+				t += Time.deltaTime;
+			}
 
+			if (state.RequestLoginAuth.written)
+			{
+				if (state.RequestLoginAuth.data == "1")
+				{
+					state.RequestLoginAuth.written = false;
+					
+					Password.GetComponent<Image>().color = goodData;
+					Username.GetComponent<Image>().color = goodData;
 
-
-
-
-			bool response = true;
-				
-				
-				
-			// *** ***
-			
-			if(response)
-				SceneManager.LoadScene("CalendarView");
+					SceneManager.LoadScene("CalendarView");
+				}
+				else
+				{
+					Username.GetComponent<Image>().color = badData;
+					Password.GetComponent<Image>().color = badData;
+				}
+			}
 		}
 		else
 		{
@@ -99,6 +111,9 @@ public class login : MonoBehaviour {
 				Password.GetComponent<Image>().color = badData;
 			}
 		}
+		
+		// for bypassing the network
+		//SceneManager.LoadScene("CalendarView");
 	}
 
 	// used by the CreateAccount button

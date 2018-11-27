@@ -42,6 +42,9 @@ public class SaveEvent : MonoBehaviour
 			}
 		}
 
+		if (val.Length > state.MaxDateTitleLen)
+			bad = true;
+
 		//if unusable
 		if (bad)
 			Title.GetComponent<Image>().color = badData;
@@ -242,21 +245,42 @@ public class SaveEvent : MonoBehaviour
 				if (state.Title != "Title")
 				{
 					// send data back with signal that it was edited
+					state.Comm.SendEditedEvent(newEventData[0], newEventData[1], newEventData[2], newEventData[3]);
+					
+					float t = 0;
+					while (t < state.Timeout && !state.SendEditedEvent.written)
+					{
+						t += Time.deltaTime;
+					}
+
+					if (state.SendEditedEvent.written && state.SendEditedEvent.data == "1")
+					{
+						state.SendEditedEvent.written = false;
+				
+						SceneManager.LoadScene("CalendarView");
+					}
 				}
 				else
 				{
 					//send back normal data
+					state.Comm.SendNewEvent(newEventData[0], newEventData[1], newEventData[2], newEventData[3]);
+
+					float t = 0;
+					while (t < state.Timeout && !state.SendNewEvent.written)
+					{
+						t += Time.deltaTime;
+					}
+
+					if (state.SendNewEvent.written && state.SendNewEvent.data == "1")
+					{
+						state.SendNewEvent.written = false;
+
+						SceneManager.LoadScene("CalendarView");
+					}
 				}
 				
-				
-				
-				
-				
-				
-				
-				// *** ***
-
-				SceneManager.LoadScene("CalendarView");
+				// for bypasssing the network
+				//SceneManager.LoadScene("CalendarView");
 			}
 			else
 			{

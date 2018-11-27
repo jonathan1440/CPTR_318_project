@@ -36,21 +36,43 @@ public class EventLayout : MonoBehaviour
 
 	private void get_data()
 	{
-		//replace the code below with some protocol query function that gets the events within a certain date range and sets them to displayable_events
-
 		displayable_events.Clear();
 		
-		foreach (var t in events)
+		//get hardcoded events
+		foreach (var e in events)
 		{
 			DateObj.DateObject endDate = startDate + new DateObj.DateObject(0, 0, 7);
-			string[] date = t["date"].ToString().Split('/');
+			string[] date = e["date"].ToString().Split('/');
 			DateObj.DateObject tday = new DateObj.DateObject(int.Parse(date[2]), int.Parse(date[0]), int.Parse(date[1]));
 			
 			if (tday >= startDate && tday < endDate)
 			{
 				
-				displayable_events.Add(t);
+				displayable_events.Add(e);
 			}
+		}
+		
+		//get database events
+		state.Comm.RequestEventRange(startDate.ToString("m:y:d"), (startDate + new DateObj.DateObject(0,0,7)).ToString("m:y:d"));
+
+		float t = 0;
+		while (t < state.Timeout && !state.displayable_events.written)
+		{
+			t += Time.deltaTime;
+		}
+
+		if (state.displayable_events.written)
+		{
+			foreach(Dictionary<string, object> evnt in state.displayable_events.data)
+			{
+				displayable_events.Add(evnt);				
+			}
+			
+			state.displayable_events.written = false;
+		}
+		else
+		{
+			Debug.Log("RequestEventRange timeout");
 		}
 	}
 

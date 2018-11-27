@@ -16,6 +16,7 @@
             <e p="EventLayout.cs" t="Include" />
             <e p="scroll.cs" t="Include" />
           </e>
+          <e p="ClientComms.cs" t="Include" />
           <e p="CreateAccount_scripts" t="Include">
             <e p="CreateAccount.cs" t="Include" />
           </e>
