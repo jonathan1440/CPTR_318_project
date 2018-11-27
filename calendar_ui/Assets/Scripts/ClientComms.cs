@@ -114,7 +114,6 @@ public class ClientComms : MonoBehaviour {
 							state.SendNewUser.written = true;
 							break;
 					}
-					
 				}
 			}
 		}

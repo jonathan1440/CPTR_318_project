@@ -27,6 +27,7 @@
           <e p="Login_scripts" t="Include">
             <e p="login.cs" t="Include" />
           </e>
+          <e p="ServerComms.cs" t="Include" />
         </e>
       </e>
       <e p="calendar_ui.sln" t="IncludeFlat" />

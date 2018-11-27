@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\EditEvent_scripts\SaveEvent.cs" />
     <Compile Include="Assets\Scripts\EditEvent_scripts\state.cs" />
     <Compile Include="Assets\Scripts\Login_scripts\login.cs" />
+    <Compile Include="Assets\Scripts\ServerComms.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>D:/SAU stuff/F18/Principles of Networking/CPTR_318_project/calendar_ui/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>

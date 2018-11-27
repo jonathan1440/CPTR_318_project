@@ -121,4 +121,9 @@ public class login : MonoBehaviour {
 	{
 		SceneManager.LoadScene("CreateAccount");
 	}
+
+	void Start()
+	{
+		state.Comm.Connect();
+	}
 }
