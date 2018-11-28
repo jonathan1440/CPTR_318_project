@@ -20,6 +20,7 @@ public class SaveEvent : MonoBehaviour
 
 	//has to be initialized to a full array to enable the check to see if all the values have been supplied before submitting them
 	private string[] newEventData = {"", "", "", ""};
+	private string[] original = {"", "", "", "", ""};
 	
 	private readonly Color badData = new Color(0.91f, 0.26f, 0.26f, 255);
 	private readonly Color goodData = new Color(1, 1, 1, 255);
@@ -245,7 +246,7 @@ public class SaveEvent : MonoBehaviour
 				if (state.Title != "Title")
 				{
 					// send data back with signal that it was edited
-					state.Comm.SendEditedEvent(newEventData[0], newEventData[1], newEventData[2], newEventData[3]);
+					state.Comm.SendEditedEvent(original[0], original[1], original[2], original[3], newEventData[0], newEventData[1], newEventData[2], newEventData[3]);
 					
 					float t = 0;
 					while (t < state.Timeout && !state.SendEditedEvent.written)
@@ -333,5 +334,10 @@ public class SaveEvent : MonoBehaviour
 		Date.GetComponentInChildren<Text>().text = state.Date;
 		StartTime.GetComponentInChildren<Text>().text = state.Start_time;
 		EndTime.GetComponentInChildren<Text>().text = state.End_time;
+
+		original[0] = Title.GetComponentInChildren<Text>().text;
+		original[1] = Date.GetComponentInChildren<Text>().text;
+		original[2] = StartTime.GetComponentInChildren<Text>().text;
+		original[3] = EndTime.GetComponentInChildren<Text>().text;
 	}
 }

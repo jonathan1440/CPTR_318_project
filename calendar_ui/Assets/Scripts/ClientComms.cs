@@ -171,9 +171,10 @@ public class ClientComms : MonoBehaviour {
 		SendMessage("03," + title + "," + date + "," + start_time + "," + end_time);
 	}
 
-	public void SendEditedEvent(string title, string date, string start_time, string end_time)
+	public void SendEditedEvent(string title1, string date1, string start_time1, string end_time1, string title2, string date2, string start_time2, string end_time2)
 	{
-		SendMessage("04," + title + "," + date + "," + start_time + "," + end_time);
+		SendMessage("04,a," + title1 + "," + date1 + "," + start_time1 + "," + end_time1);
+		SendMessage("04,b," + title2 + "," + date2 + "," + start_time2 + "," + end_time2);
 	}
 	
 	public void SendNewUser(string user, string pswd)
