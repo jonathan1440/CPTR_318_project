@@ -1,17 +1,18 @@
  - request login auth
 	- send "01" + username + password (2+1+20+1+20 = 44 bytes)
-	- reply "51" + <"1" for success, "0" for failure> (2+1+1 = 4 bytes)
+	- reply "51" + <"1" for success, "-1" for failure> (2+1+1 = 4 bytes)
  - request event range
-	- send "02" + start date + end date (2+1+6+1+6 = 16 bytes)
+	- send "02" + start date + end date (2+1+10+1+10 = 24 bytes)
 	- reply "52" + "a" + <# of events in range> (2+1+1+1+<digits in #> = 7+ bytes)
 	  for each event:
-		reply "12" + "b" + title + date + start time + end time (2+1+1+1+30+1+10+1+6+1+6 = 60 bytes)
+		reply "52" + "b" + title + date + start time + end time (2+1+1+1+30+1+10+1+6+1+6 = 60 bytes)
  - send new event
 	- send "03" + title + date + start time + end time (2+1+30+1+10+1+6+1+6 = 58 bytes)
-	- reply "53" + <"1" for success, "0" for failure> (4 bytes)
+	- reply "53" + <"1" for success, "-1" for failure> (4 bytes)
  - send edited event
-	- send "04" + title + date + start time + end time (58 bytes)
-	- reply "54" + <"1" for success, "0" for failure> (4 bytes)
+	- send "04" + "a" + title + date + start time + end time (60 bytes
+	- send "04" + "b" + title + date + start time + end time (60 bytes)
+	- reply "54" + <"1" for success, "-1" for failure> (4 bytes)
  - send new user
 	- send "05" + username + password (2+1+20+1+20 = 44 bytes)
-	- reply "55" + <"1" for success, "0" for failure> (4 bytes)
+	- reply "55" + <"1" for success, "-1" for failure> (4 bytes)

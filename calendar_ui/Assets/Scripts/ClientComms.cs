@@ -14,6 +14,7 @@ public class ClientComms : MonoBehaviour {
 	private Thread clientThread;
 	private int timeout = 20;
 
+	
 	public bool Connected
 	{
 		get { return socket != null && socket.Connected; }
@@ -27,6 +28,7 @@ public class ClientComms : MonoBehaviour {
 			clientThread = new Thread(Execute);
 			clientThread.IsBackground = true;
 			clientThread.Start();
+			Debug.Log("Connection started");
 		}
 		catch (Exception e)
 		{
@@ -65,6 +67,8 @@ public class ClientComms : MonoBehaviour {
 							state.RequestLoginAuth.data = strArr[1];
 
 							state.RequestLoginAuth.written = true;
+							
+							Debug.Log("login auth response recieved");
 							break;
 							
 						case "52":
@@ -93,6 +97,7 @@ public class ClientComms : MonoBehaviour {
 								events_to_rcv = 0;
 
 								state.displayable_events.written = true;
+								Debug.Log("Event range received");
 							}
 							break;
 						
@@ -100,18 +105,21 @@ public class ClientComms : MonoBehaviour {
 							state.SendNewEvent.data = strArr[1];
 
 							state.SendNewEvent.written = true;
+							Debug.Log("new event response received");
 							break;
 							
 						case "54":
 							state.SendEditedEvent.data = strArr[1];
 
 							state.SendEditedEvent.written = true;
+							Debug.Log("edited event response received");
 							break;
 						
 						case "55":
 							state.SendNewUser.data = strArr[1];
 
 							state.SendNewUser.written = true;
+							Debug.Log("new user response recieved");
 							break;
 					}
 				}
