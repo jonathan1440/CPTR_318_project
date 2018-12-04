@@ -108,7 +108,7 @@ public class DateObj : MonoBehaviour
 					return day_abrvs[day_of_the_week() - 1];
 				
 				case "m":
-					return "/" + month.ToString();
+					return month.ToString();
 				
 				case "M":
 					return " " + months[month - 1];
@@ -130,14 +130,22 @@ public class DateObj : MonoBehaviour
 		
 		public string ToString(string format)
 		{
-			string[] ff = format.Split(':');
 			string rf = "";
-
-			foreach(string segment in ff)
-			{
-				rf += string_formatting(segment);
-			}
 			
+			if (format == "m:d:y")
+			{
+				rf = month + "/" + day + "/" + year;
+			}
+			else
+			{
+				string[] ff = format.Split(':');
+
+				foreach (string segment in ff)
+				{
+					rf += string_formatting(segment);
+				}
+			}
+
 			return rf;
 		}
 		

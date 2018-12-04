@@ -1,34 +1,29 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using UnityEngine;
 
-public class ClientComms : MonoBehaviour {
+// adapted from gist.github.com/danielbierwirth/0636650b005834204cb19ef5ae6ccedb
 
-	private TcpClient socket;
-	private Thread clientThread;
-	private int timeout = 20;
-
-	
-	public bool Connected
-	{
-		get { return socket != null && socket.Connected; }
-		
-	}
+public class ClientComms : MonoBehaviour
+{
+	private static readonly object Lock = new object();
+	private static TcpClient _server;
+	private static Thread _clientThread;
+	private static NetworkStream _stream; 
 
 	public void Connect()
 	{
 		try
 		{
-			clientThread = new Thread(Execute);
-			clientThread.IsBackground = true;
-			clientThread.Start();
-			Debug.Log("Connection started");
+			_clientThread = new Thread(Execute) {IsBackground = true};
+			_clientThread.Start();
+
+			Debug.Log("thread created");
+
+			//SetupSocket();
 		}
 		catch (Exception e)
 		{
@@ -36,23 +31,44 @@ public class ClientComms : MonoBehaviour {
 		}
 	}
 
-	private void Execute()
+	private static void SetupSocket()
+	{		
+		lock (Lock)
+		{
+			Debug.Log("ip " + state.Server_ip);
+			Debug.Log("port " + state.Server_port);
+			
+			_server = new TcpClient(state.Server_ip, state.Server_port);
+			state.Connected = true;
+			Debug.Log("Connection started");
+			
+			_stream = _server.GetStream();
+		}
+	}
+
+	private static void Execute()
 	{
-		Debug.Log("need to reset this to the RPi's IP address and an open port");
-		socket = new TcpClient(state.Server_ip, state.Server_port);
+		if (_server == null) SetupSocket();
+		if (!_server.Connected) SetupSocket();
+
+		var bytes = new byte[state.MaxReplyLen];
 		
-		Byte[] bytes = new Byte[state.MaxReplyLen];
+		var events_rcvd = 0;
+		var events_to_rcv = 0;
 		
-		int events_rcvd = 0;
-		int events_to_rcv = 0;
+		Debug.Log("executing");
 
 		while (true)
 		{
-			using (NetworkStream stream = socket.GetStream())
-			{
+			Debug.Log("waiting");
+			
+			//using (var stream = _server.GetStream())
+			//{
 				int length;
+				
+				Debug.Log("got stream");
 
-				while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
+				while ((length = _stream.Read(bytes, 0, bytes.Length)) != 0)
 				{
 					var incommingData = new byte[length];
 					
@@ -61,34 +77,46 @@ public class ClientComms : MonoBehaviour {
 					string serverMessage = Encoding.ASCII.GetString(incommingData); 
 					string[] strArr = serverMessage.Split(',');
 
+					Debug.Log("new message recieved: " + serverMessage);
+					
 					switch (strArr[0])
 					{
 						case "51":
-							state.RequestLoginAuth.data = strArr[1];
+							state.RequestLoginAuth.Data = strArr[1];
 
-							state.RequestLoginAuth.written = true;
+							state.RequestLoginAuth.Written = true;
 							
-							Debug.Log("login auth response recieved");
+							Debug.Log("login auth response received");
+							
 							break;
 							
 						case "52":
-							//convert to list of dictionaries
-							if (strArr[1] == "a")
+							switch (strArr[1])
 							{
-								events_to_rcv = int.Parse(strArr[2]);
-								state.displayable_events.data.Clear();
-							}
-							else if (strArr[1] == "b")
-							{
-								Dictionary<string, object> evnt = new Dictionary<string, object>();
-								evnt.Add("title", strArr[3]);
-								evnt.Add("date", strArr[4]);
-								evnt.Add("start time", strArr[5]);
-								evnt.Add("end time", strArr[6]);
-								
-								state.displayable_events.data.Add(evnt);
+								//convert to list of dictionaries
+								case "a":
+									events_to_rcv = int.Parse(strArr[2]);
+									Debug.Log("events to receive: " + events_to_rcv);
+									state.displayable_events.Data.Clear();
+									break;
+								case "b":
+								{
+									var evnt = new Dictionary<string, object>
+									{
+										{"title", strArr[2]},
+										{"date", strArr[3]},
+										{"start time", strArr[4]},
+										{"end time", strArr[5]}
+									};
 
-								events_rcvd++;
+									state.displayable_events.Data.Add(evnt);
+									Debug.Log("event added to displayable_events.Data");
+
+									events_rcvd++;
+									Debug.Log("total events received: " + events_rcvd);
+									
+									break;
+								}
 							}
 
 							if (events_rcvd == events_to_rcv)
@@ -96,97 +124,95 @@ public class ClientComms : MonoBehaviour {
 								events_rcvd = 0;
 								events_to_rcv = 0;
 
-								state.displayable_events.written = true;
+								state.displayable_events.Written = true;
 								Debug.Log("Event range received");
 							}
+							
 							break;
 						
 						case "53":
-							state.SendNewEvent.data = strArr[1];
+							state.SendNewEvent.Data = strArr[1];
 
-							state.SendNewEvent.written = true;
+							state.SendNewEvent.Written = true;
 							Debug.Log("new event response received");
+							
 							break;
 							
 						case "54":
-							state.SendEditedEvent.data = strArr[1];
+							state.SendEditedEvent.Data = strArr[1];
 
-							state.SendEditedEvent.written = true;
+							state.SendEditedEvent.Written = true;
 							Debug.Log("edited event response received");
 							break;
 						
 						case "55":
-							state.SendNewUser.data = strArr[1];
+							state.SendNewUser.Data = strArr[1];
+							Debug.Log(strArr[1]);
 
-							state.SendNewUser.written = true;
-							Debug.Log("new user response recieved");
+							state.SendNewUser.Written = true;
+							Debug.Log("new user response processed");
+							
+							break;
+						
+						case "56":
+							state.TerminateComm.Data = strArr[1];
+
+							state.TerminateComm.Written = true;
+							Debug.Log("received response for terminate comm");
+							
+							_server.GetStream().Close();
+							Debug.Log("connection stream closed");
+							_server.Close();
+							Debug.Log("connection closed");
+							
 							break;
 					}
 				}
-			}
+			//}
 		}
 	}
 
-	private void SendMessage(string message)
+	public void SendTcpMessage(string message)
 	{
-		if (socket == null)
-		{
-			return;
-		}
+		Debug.Log("message to send: " + message);
+		
+		if (_server == null) return;
+		if (!_server.Connected) return;
 		
 		try
 		{
-			NetworkStream stream = socket.GetStream();
-
-			if (stream.CanWrite)
+			Debug.Log(_stream.CanWrite);
+			if (!_stream.CanWrite) return;
+			
+			Debug.Log("Can write to stream");
+			
+			//add to message until up to necessary length
+			if (message.Length < state.MaxReplyLen-1)
 			{
-				//get message up to length
-				if (message.Length < state.MaxReplyLen)
-				{
-					message += ",";
+				message += ",";
 					
-					while (message.Length < state.MaxReplyLen)
-					{
-						message += " ";
-					}
+				while (message.Length < state.MaxReplyLen - 1)
+				{
+					message += " ";
 				}
-				
-				//turn message from string into bytes
-				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(message);
-				
-				//write byte array to socket stream
-				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
 			}
+			message += ",";                            
+				
+			Debug.Log("message padded");
+				
+			//turn message from string into bytes
+			var clientMessageAsByteArray = Encoding.ASCII.GetBytes(message);
+			Debug.Log("message encoded");
+				
+			//write byte array to socket stream
+			_stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+			_stream.Flush();
+			
+			Debug.Log("message written to stream: " + message);
 		}
 		catch (SocketException socketException)
 		{
 			Debug.Log("Socket exception: " + socketException);
 		}
-	}
-
-	public void RequestLoginAuth(string user, string pswd)
-	{
-		SendMessage("01," + user + "," + pswd);
-	}
-
-	public void RequestEventRange(string start_date, string end_date)
-	{
-		SendMessage("02," + start_date + "," + end_date);
-	}
-
-	public void SendNewEvent(string title, string date, string start_time, string end_time)
-	{
-		SendMessage("03," + title + "," + date + "," + start_time + "," + end_time);
-	}
-
-	public void SendEditedEvent(string title1, string date1, string start_time1, string end_time1, string title2, string date2, string start_time2, string end_time2)
-	{
-		SendMessage("04,a," + title1 + "," + date1 + "," + start_time1 + "," + end_time1);
-		SendMessage("04,b," + title2 + "," + date2 + "," + start_time2 + "," + end_time2);
-	}
-	
-	public void SendNewUser(string user, string pswd)
-	{
-		SendMessage("05," + user + "," + pswd);
 	}
 }

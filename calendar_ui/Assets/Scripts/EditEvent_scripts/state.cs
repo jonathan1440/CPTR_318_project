@@ -2,45 +2,64 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class state : MonoBehaviour
 {
 
-	private static string title, date, start_time, end_time;
-	
-	private static string server_ip = "127.0.0.1";
-	private static int server_port = 8888;
-	private static int timeout = 20;
-	private static int max_date_title_len = 30;
-	private static int max_user_pass_len = 20;
-	private static int max_reply_len = 60;
+	private static string _title, _date, _startTime, _endTime;
+	private static bool _connected;
+
+	private const string ServerIp = /*"192.168.2.152";//*/"10.9.167.225";
+	private const int ServerPort = 9999;
+	private const int _timeout = 10000;
+	private const int max_date_title_len = 30;
+	private const int max_user_pass_len = 20;
+	private const int max_reply_len = 61;
 	private static ClientComms comm = new ClientComms();
 	
-	public struct rcvd_data
+	public struct RcvdData
 	{
-		public object data;
-		public bool written;
-		public bool read;
+		public string Data;
+		public bool Written;
 	}
 
-	public static rcvd_data RequestLoginAuth, SendNewEvent, SendEditedEvent, 
-		SendNewUser;
-
-
-	public struct events
-	{
-		public List<Dictionary<string, object>> data;
-		public bool written;
-		public bool read;
-	}
+	public static RcvdData RequestLoginAuth, SendNewEvent, SendEditedEvent, SendNewUser, TerminateComm;
 	
-	public static events displayable_events;
+	
+	
+	public class evnts
+	{
+		public List<Dictionary<string, object>> Data = new List<Dictionary<string, object>>();
+		public bool Written;
+	}
+
+	public static readonly evnts displayable_events = new evnts();
 	
 	private void Start()
 	{
-		displayable_events.data = new List<Dictionary<string, object>>();
+		RequestLoginAuth.Data = "";
+		SendNewEvent.Data = "";
+		SendEditedEvent.Data = "";
+		SendNewUser.Data = "";
+		TerminateComm.Data = "";
 	}
 
+	private void Update()
+	{
+		/*if (SendNewUser.data == "1")
+		{
+			SendNewUser.written = false;
+			SceneManager.LoadScene("Login");
+		}*/
+	}
+
+
+	public static bool Connected
+	{
+		get { return _connected; }
+		set { _connected = value; }
+	}
 
 	public static int MaxUserPassLen
 	{
@@ -64,41 +83,40 @@ public class state : MonoBehaviour
 
 	public static string Title
 	{
-		get { return title; }
-		set { title = value; }
+		get { return _title; }
+		set { _title = value; }
 	}
 	
 	public static string Date
 	{
-		get { return date; }
-		set { date = value; }
+		get { return _date; }
+		set { _date = value; }
 	}
 	
 	public static string Start_time
 	{
-		get { return start_time; }
-		set { start_time = value; }
+		get { return _startTime; }
+		set { _startTime = value; }
 	}
 	
 	public static string End_time
 	{
-		get { return end_time; }
-		set { end_time = value; }
+		get { return _endTime; }
+		set { _endTime = value; }
 	}
 
 	public static string Server_ip
 	{
-		get { return server_ip; }
+		get { return ServerIp; }
 	}
 
 	public static int Server_port
 	{
-		get { return server_port; }
+		get { return ServerPort; }
 	}
 
 	public static int Timeout
 	{
-		get { return timeout; }
-		set { timeout = value; }
+		get { return _timeout; }
 	}
 }

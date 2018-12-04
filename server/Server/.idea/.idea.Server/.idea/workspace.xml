@@ -2,30 +2,60 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb5c74b6-39ef-49ed-a90b-da025532758c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/contentModel.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Server/riderModule.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/.idea/.idea.calendar_ui/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/.idea/.idea.calendar_ui/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Assembly-CSharp.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/ClientComms.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/ClientComms.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/Server/ServerComms.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/Server/ServerComms.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/CurrentLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/CurrentLayout.dwlt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/EditorInstance.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/CreateAccount_scripts/CreateAccount.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/CreateAccount_scripts/CreateAccount.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/EditEvent_scripts/state.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/EditEvent_scripts/state.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/Login_scripts/login.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Assets/Scripts/Login_scripts/login.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/EditorUserBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/EditorUserBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/LastSceneManagerSetup.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/LastSceneManagerSetup.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/ProtocolInstance.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptAssemblies/Assembly-CSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptAssemblies/Assembly-CSharp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptAssemblies/BuiltinAssemblies.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptAssemblies/BuiltinAssemblies.stamp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptMapper" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/ScriptMapper" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/SpriteAtlasDatabase.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/SpriteAtlasDatabase.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/assetDatabase3" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/assetDatabase3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/00/00000000000000004000000000000000" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/00/00000000000000004000000000000000" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/00/00000000000000009000000000000000" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/00/00000000000000009000000000000000" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/06/06384489cf706cd47ba5d48a6a045a19" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/06/06384489cf706cd47ba5d48a6a045a19" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/12/12fd8a0055b84bb59e84c9835a37e333" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/12/12fd8a0055b84bb59e84c9835a37e333" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/1c/1c6d1fbb51834b64847b1b73a75bfc77" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/1c/1c6d1fbb51834b64847b1b73a75bfc77" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/32/32188fd89022c154c81befa2f0e00be0" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/32/32188fd89022c154c81befa2f0e00be0" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/35/356b08dcdb6d8ce46b08c10e712a390f" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/35/356b08dcdb6d8ce46b08c10e712a390f" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/3a/3a84de5cd0624681b6b6dcd8921d912a" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/3a/3a84de5cd0624681b6b6dcd8921d912a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/40/405b9b51bb344a128608d968297df79c" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/40/405b9b51bb344a128608d968297df79c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/41/4113173d5e95493ab8765d7b08371de4" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/41/4113173d5e95493ab8765d7b08371de4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/4a/4a3ecb1425d14502837abea459cf2b70" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/4a/4a3ecb1425d14502837abea459cf2b70" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/4b/4b3fa4bde7f1451a8218c03ee6a8ded8" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/4b/4b3fa4bde7f1451a8218c03ee6a8ded8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/4b/4ba2329b63d54f0187bcaa12486b1b0f" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/4b/4ba2329b63d54f0187bcaa12486b1b0f" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/52/52a206b72a8f4f749c28d8b18b42dd19" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/52/52a206b72a8f4f749c28d8b18b42dd19" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/53/53ebcfaa2e1e4e2dbc85882cd5a73fa1" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/53/53ebcfaa2e1e4e2dbc85882cd5a73fa1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/57/5782f9e9e6e0bb94bac99aeea24814fc" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/57/5782f9e9e6e0bb94bac99aeea24814fc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/5f/5f32cd94baa94578a686d4b9d6b660f7" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/5f/5f32cd94baa94578a686d4b9d6b660f7" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/6a/6a10b2909283487f913b00d94cd3faf5" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/6a/6a10b2909283487f913b00d94cd3faf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/76/7668179ede524d6396c8b7d84461ea29" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/76/7668179ede524d6396c8b7d84461ea29" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/80/80a3616ca19596e4da0f10f14d241e9f" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/80/80a3616ca19596e4da0f10f14d241e9f" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/84/844f815391db42d49455cbf1a7bfc434" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/84/844f815391db42d49455cbf1a7bfc434" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/84/84a3cf27f3ab00d4e95b7e11389e7398" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/84/84a3cf27f3ab00d4e95b7e11389e7398" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/87/870353891bb340e2b2a9c8707e7419ba" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/87/870353891bb340e2b2a9c8707e7419ba" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/9a/9aeb7b94e44619a4bbf8db0dd77f9572" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/9a/9aeb7b94e44619a4bbf8db0dd77f9572" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/ad/adebbd281f1a4ef3a30be7f21937e02f" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/ad/adebbd281f1a4ef3a30be7f21937e02f" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/b5/b5da970776034f77a070d99423d68791" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/b5/b5da970776034f77a070d99423d68791" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/c9/c935371424f6d554c80b14b881217e5a" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/c9/c935371424f6d554c80b14b881217e5a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/d2/d2170503dc57f492481ebe9334c68fcc" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/d2/d2170503dc57f492481ebe9334c68fcc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/d3/d33d54853fd0f48e0ac8a63ea91e6626" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/d3/d33d54853fd0f48e0ac8a63ea91e6626" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/d7/d77980660733f07429f2081cc4d7b4be" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/d7/d77980660733f07429f2081cc4d7b4be" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/dc/dc443db3e92b4983b9738c1131f555cb" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/dc/dc443db3e92b4983b9738c1131f555cb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/e4/e4bfeabebc5114952a57d908ff706b7e" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/e4/e4bfeabebc5114952a57d908ff706b7e" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/e4/e4f4cf1b9b434137a499903a7a1d651a" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/e4/e4f4cf1b9b434137a499903a7a1d651a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/ea/ead147da21254ff9a0a936bdd75e1680" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/ea/ead147da21254ff9a0a936bdd75e1680" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/ed/ed7343f30e3843b3afda8f8b02669cea" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/ed/ed7343f30e3843b3afda8f8b02669cea" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/f5/f5f67c52d1564df4a8936ccd202a3bd8" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/f5/f5f67c52d1564df4a8936ccd202a3bd8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/f7/f70555f144d8491a825f0804e09c671c" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/f7/f70555f144d8491a825f0804e09c671c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/f7/f7b54ff4a43d4fcf81b4538b678e0bcc" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/metadata/f7/f7b54ff4a43d4fcf81b4538b678e0bcc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../calendar_ui/Library/shadercompiler-UnityShaderCompiler.exe0.log" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/Library/shadercompiler-UnityShaderCompiler.exe0.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../calendar_ui/protocol_description.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/protocol_description.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../calendar_ui/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../../calendar_ui/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Library/CurrentLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/Library/CurrentLayout.dwlt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,6 +67,7 @@
     <session id="-853939992">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -68,8 +99,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/DateObj.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+            <state relative-caret-position="315">
+              <caret line="47" column="38" lean-forward="true" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
               <folding>
                 <marker date="1543411403059" expanded="true" signature="6:51" ph="..." />
                 <marker date="1543411403059" expanded="true" signature="89:4663" ph="{...}" />
@@ -181,10 +212,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="260" />
+    <option name="y" value="146" />
     <option name="width" value="1335" />
-    <option name="height" value="1039" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -262,12 +294,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543411051093</updated>
-      <workItem from="1543411052932" duration="350000" />
+      <workItem from="1543411052932" duration="2012000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="350000" />
+    <option name="totallyTimeSpent" value="2012000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -279,11 +311,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
+    <frame x="208" y="117" width="1068" height="830" extended-state="1" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3690476" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="NuGet" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
@@ -376,8 +407,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/DateObj.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+        <state relative-caret-position="315">
+          <caret line="47" column="38" lean-forward="true" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
           <folding>
             <marker date="1543411403059" expanded="true" signature="6:51" ph="..." />
             <marker date="1543411403059" expanded="true" signature="89:4663" ph="{...}" />

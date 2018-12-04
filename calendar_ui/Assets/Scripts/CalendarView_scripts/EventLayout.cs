@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 using Image = UnityEngine.UI.Image;
 
 public class EventLayout : MonoBehaviour
@@ -19,15 +24,15 @@ public class EventLayout : MonoBehaviour
 	private List<Dictionary<string, object>> displayable_events;
 	
 	//should be set to the Background sprite
-	public Sprite img;
+	[FormerlySerializedAs("img")] public Sprite Img;
 	
 	//should be set to the days GameObject
-	public GameObject parent;
+	[FormerlySerializedAs("parent")] public GameObject Parent;
 	
 	//should be set to the Arial font
-	public Font tfon;
+	[FormerlySerializedAs("tfon")] public Font Tfon;
 	
-	private Color[] eventColors =
+	private readonly Color[] _eventColors =
 	{
 		new Color(0.65f, 0.81f, 0.89f, 1), new Color(0.12f, 0.47f, 0.71f, 1), new Color(0.70f, 0.87f, 0.54f, 1),
 		new Color(0.2f, 0.63f, 0.17f, 1), new Color(0.2f, 0.60f, 0.60f, 1), new Color(0.99f, 0.75f, 0.44f, 1), 
@@ -41,53 +46,56 @@ public class EventLayout : MonoBehaviour
 		//get hardcoded events
 		foreach (var e in events)
 		{
-			DateObj.DateObject endDate = startDate + new DateObj.DateObject(0, 0, 7);
-			string[] date = e["date"].ToString().Split('/');
-			DateObj.DateObject tday = new DateObj.DateObject(int.Parse(date[2]), int.Parse(date[0]), int.Parse(date[1]));
+			var endDate = startDate + new DateObj.DateObject(0, 0, 7);
+			var date = e["date"].ToString().Split('/');
+			var tday = new DateObj.DateObject(int.Parse(date[2]), int.Parse(date[0]), int.Parse(date[1]));
 			
-			if (tday >= startDate && tday < endDate)
-			{
-				
-				displayable_events.Add(e);
-			}
+			if (tday >= startDate && tday < endDate) displayable_events.Add(e);
 		}
 		
 		//get database events
-		state.Comm.RequestEventRange(startDate.ToString("m:y:d"), (startDate + new DateObj.DateObject(0,0,7)).ToString("m:y:d"));
+		state.Comm.SendTcpMessage("02," + startDate.ToString("m:d:y") + "," + (startDate + new DateObj.DateObject(0,0,7)).ToString("m:d:y"));
 
-		float t = 0;
-		while (t < state.Timeout && !state.displayable_events.written)
+		var stopwatch = new Stopwatch();
+		stopwatch.Start();
+		while (!state.displayable_events.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
 		{
-			t += Time.deltaTime;
+			Thread.Sleep(200);
+				
+			Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
+			if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
+			Debug.Log("timeout");
 		}
-
-		if (state.displayable_events.written)
+		stopwatch.Stop();
+		
+		if (state.displayable_events.Written)
 		{
-			foreach(Dictionary<string, object> evnt in state.displayable_events.data)
+			foreach (var evnt in state.displayable_events.Data)
 			{
-				displayable_events.Add(evnt);				
+				Debug.Log("retrieved " + evnt["title"] +" from state.displayable_events.Data");
+				displayable_events.Add(evnt);
+				Debug.Log("added " + displayable_events[displayable_events.Count - 1]["title"] + "to list to be displayed");
 			}
 			
-			state.displayable_events.written = false;
+			Debug.Log("added events");
+			
+			state.displayable_events.Written = false;
 		}
-		else
-		{
-			Debug.Log("RequestEventRange timeout");
-		}
+		else Debug.Log("RequestEventRange timeout");
 	}
 
 	// returns duration in pixels
-	private float duration(string start, string end)
+	private static float Duration(string start, string end)
 	{
-		string[] ss = start.Split(':');
-		string[] es = end.Split(':');
+		var ss = start.Split(':');
+		var es = end.Split(':');
 
 		float shour = int.Parse(ss[0]);
-		int smin = int.Parse(ss[1].Substring(0,2));
-		char shal = ss[1][2];
+		var smin = int.Parse(ss[1].Substring(0,2));
+		var shal = ss[1][2];
 
 		float ehour = int.Parse(es[0]);
-		int emin = int.Parse(es[1].Substring(0, 2));
+		var emin = int.Parse(es[1].Substring(0, 2));
 		int ehal = es[1][2];
 		
 		//convert to military time for math purposes
@@ -109,10 +117,10 @@ public class EventLayout : MonoBehaviour
 	//returns y coord relative to the panel at which to put the event
 	private float start_spot(string start, string end)
 	{
-		string[] ss = start.Split(':');
+		var ss = start.Split(':');
 		float shour = int.Parse(ss[0]);
-		int smin = int.Parse(ss[1].Substring(0,2));
-		char shal = ss[1][2];
+		var smin = int.Parse(ss[1].Substring(0,2));
+		var shal = ss[1][2];
 		
 		//convert to military time for math purposes
 		shour += shal == 'p' ? 12 : 0;
@@ -121,18 +129,18 @@ public class EventLayout : MonoBehaviour
 		//change minutes to fraction of an hour and add it to the total
 		shour += smin / 60.0f;
 		
-		float width_offset = (duration(start, end) - 160) / 2;
-		float scrollbar_offset = 2714 * scrollbar.GetComponent<Scrollbar>().value;
+		var width_offset = (Duration(start, end) - 160) / 2;
+		var scrollbar_offset = 2714 * scrollbar.GetComponent<Scrollbar>().value;
 		
 		// I can't explain how or why this works
-		// but it has something to do with the event panel transforms being at their centers
+		// but it has something to do with the event panel transforms being at the panel centers
 		return -858 - shour * 160.0f - width_offset + scrollbar_offset;
 	}
 
 	private void create_text_go(string title, string text, int fontSize, FontStyle fStyle, Color tColor,
 		GameObject tparent, Vector3 position, Vector2 size)
 	{
-		GameObject tt = new GameObject(title);
+		var tt = new GameObject(title);
 			
 		//add necessary components
 		tt.AddComponent<RectTransform>();
@@ -140,9 +148,9 @@ public class EventLayout : MonoBehaviour
 		tt.AddComponent<Text>();
 			
 		//edit text stuff
-		Text ttText = tt.GetComponent<Text>();
+		var ttText = tt.GetComponent<Text>();
 		ttText.text = text;
-		ttText.font = tfon;
+		ttText.font = Tfon;
 		ttText.fontSize = fontSize;
 		ttText.fontStyle = fStyle;
 		ttText.color = tColor;
@@ -151,19 +159,19 @@ public class EventLayout : MonoBehaviour
 		//set location
 		tt.transform.SetParent(tparent.transform);
 		tt.transform.position = position;
-		RectTransform ttrt = tt.GetComponent<RectTransform>();
+		var ttrt = tt.GetComponent<RectTransform>();
 		ttrt.sizeDelta = size;
 		ttrt.anchorMin = new Vector2(0, 1);
 		ttrt.anchorMax = new Vector2(0, 1);
 	}
 
 	// to be called by the edit buttons
-	public void edit_button(/*string title, string date, string start_time, string end_time)*/Dictionary<string, object> event_details)
+	public void edit_button(Dictionary<string, object> eventDetails)
 	{
-		state.Title = event_details["title"].ToString();
-		state.Date = event_details["date"].ToString();
-		state.Start_time = event_details["start time"].ToString();
-		state.End_time = event_details["end time"].ToString();
+		state.Title = eventDetails["title"].ToString();
+		state.Date = eventDetails["date"].ToString();
+		state.Start_time = eventDetails["start time"].ToString();
+		state.End_time = eventDetails["end time"].ToString();
 		
 		SceneManager.LoadScene("EditEvent");
 	}
@@ -171,30 +179,29 @@ public class EventLayout : MonoBehaviour
 	private void draw_events()
 	{
 		//clear out previously displayed events
-		foreach (Transform child in parent.transform)
-		{
-			Destroy(child.gameObject);
-		}
+		foreach (Transform child in Parent.transform) Destroy(child.gameObject);
 		
 		//create new events
-		List<Dictionary<string, object>> de = displayable_events;
+		var de = displayable_events;
 
-		for (int i = 0; i < de.Count; i++)
+		for (var i = 0; i < de.Count; i++)
 		{
-			string[] date = de[i]["date"].ToString().Split('/');
-			DateObj.DateObject date2 = new DateObj.DateObject(int.Parse(date[2]), int.Parse(date[0]), int.Parse(date[1]));
+			var date = de[i]["date"].ToString().Split('/');
+			var date2 = new DateObj.DateObject(int.Parse(date[2]), int.Parse(date[0]), int.Parse(date[1]));
 
-			string start_time = de[i]["start time"].ToString();
-			string end_time = de[i]["end time"].ToString();
-			float min_duration = duration(start_time, end_time);
-			float start_pix = start_spot(start_time, end_time);
+			var startTime = de[i]["start time"].ToString();
+			var endTime= de[i]["end time"].ToString();
+			var minDuration = Duration(startTime, endTime);
+			var startPix = start_spot(startTime, endTime);
 
-			int x_change = (date2.day_of_the_week() - 1) * 388;
-			float edit_button_l = 40f;
+			var xChange = (date2.day_of_the_week() - 1) * 388;
+			const float editButtonL = 40f;
+			
+			
 			
 			//BACK PANEL
 			//init GameObject for the event
-			GameObject e = new GameObject("event " + i);
+			var e = new GameObject("event " + i);
 
 			//add necessary components
 			e.AddComponent<RectTransform>();
@@ -202,23 +209,24 @@ public class EventLayout : MonoBehaviour
 			e.AddComponent<Image>();
 
 			//edit Image component
-			Image eimg = e.GetComponent<Image>();
-			eimg.sprite = img;
-			eimg.color = eventColors[i % eventColors.Length];
+			var eimg = e.GetComponent<Image>();
+			eimg.sprite = Img;
+			eimg.color = _eventColors[i % _eventColors.Length];
 			eimg.type = Image.Type.Sliced;
 			eimg.fillCenter = true;
 
 			//set location
-			e.transform.SetParent(parent.transform);
-			e.transform.position = new Vector3(-1046 + x_change, start_pix, 0);
-			RectTransform ert = e.GetComponent<RectTransform>();
-			ert.sizeDelta = new Vector2(380, min_duration);
+			e.transform.SetParent(Parent.transform);
+			e.transform.position = new Vector3(-1046 + xChange, startPix, 0);
+			var ert = e.GetComponent<RectTransform>();
+			ert.sizeDelta = new Vector2(380, minDuration);
 			ert.anchorMin = new Vector2(1, 1);
 			ert.anchorMax = new Vector2(1, 1);
 			
 
+			
 			//EDIT BUTTON
-			GameObject b = new GameObject("edit");
+			var b = new GameObject("edit");
 
 			//add necessary components
 			b.AddComponent<RectTransform>();
@@ -228,59 +236,60 @@ public class EventLayout : MonoBehaviour
 			
 			//set location
 			b.transform.SetParent(e.transform);
-			b.transform.position = new Vector3(310 + x_change - edit_button_l/2f, 1916 + start_pix, 0);
-			RectTransform brt = b.GetComponent<RectTransform>();
-			brt.sizeDelta = new Vector2(edit_button_l, edit_button_l);
+			b.transform.position = new Vector3(310 + xChange - editButtonL/2f, 1916 + startPix, 0);
+			var brt = b.GetComponent<RectTransform>();
+			brt.sizeDelta = new Vector2(editButtonL, editButtonL);
 			brt.anchorMin = new Vector2(1, 1);
 			brt.anchorMax = new Vector2(1, 1);
 			
 			//edit Image component
-			Image bimg = b.GetComponent<Image>();
-			bimg.sprite = img;
+			var bimg = b.GetComponent<Image>();
+			bimg.sprite = Img;
 			bimg.color = new Color(1, 1, 1, 0.4f);
 			bimg.type = Image.Type.Sliced;
 			bimg.fillCenter = true;
 			
 			//edit text stuff
-			create_text_go("text", "✎", 35, FontStyle.Bold, Color.black, b, new Vector3(500 + x_change, 1871.25f + start_pix + min_duration/2 + edit_button_l/2, 0), new Vector2(edit_button_l, edit_button_l));
+			create_text_go("text", "✎", 35, FontStyle.Bold, Color.black, b,
+				new Vector3(500 + xChange, 1871.25f + startPix + minDuration / 2 + editButtonL / 2, 0),
+				new Vector2(editButtonL, editButtonL));
 			
 			//edit button.OnClick()
-			string[] nam = e.name.Split(' ');
-			int ind = Int32.Parse(nam[nam.Length-1]);
+			var nam = e.name.Split(' ');
+			var ind = Int32.Parse(nam[nam.Length-1]);
 			b.GetComponent<Button>().onClick.AddListener(delegate { edit_button(de[ind]); });
 			
 			
 			//TITLE TEXT
 			create_text_go("title text", de[i]["title"].ToString(), 40, FontStyle.Bold, Color.black, e,
-				new Vector3(500 + x_change - edit_button_l / 2, 1913.25f + start_pix, 0),
-				new Vector2(380 - edit_button_l, 45.5f));
+				new Vector3(500 + xChange - editButtonL / 2, 1913.25f + startPix, 0),
+				new Vector2(380 - editButtonL, 45.5f));
 			
 			//TIME TEXT
 			//if the event is long enough for there to be space on the event to show the time
-			if(min_duration / 160.0f >= 0.5f)
+			if (minDuration / 160.0f >= 0.5f)
 				create_text_go("duration", de[i]["start time"] + " - " + de[i]["end time"], 30,
-					FontStyle.Normal, Color.black, e, new Vector3(500 + x_change, 1871.25f + start_pix, 0), new Vector2(380, 40));
+					FontStyle.Normal, Color.black, e, new Vector3(500 + xChange, 1871.25f + startPix, 0),
+					new Vector2(380, 40));
+			
+			Debug.Log("panel created for " + de[i]["title"]);
 		}
 	}
 	
 	// Use this for initialization
-	void Start () {
-		//delete when protocol is implemented
+	private void Start () {
 		events = CSVReader.Read("events");
 		displayable_events = new List<Dictionary<string, object>>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		DateObj.DateObject temp = DateText.GetComponent<date>().display_date;
-		
-		if (temp != startDate || Time.frameCount < 10)
-		{
-			startDate = temp;
+	private void Update () {
+		var temp = DateText.GetComponent<date>().display_date;
+
+		if (temp == startDate && Time.frameCount >= 10) return;
+		startDate = temp;
 			
-			get_data();
-			
-			draw_events();
-		}
+		get_data();
+		draw_events();
 	}
 }

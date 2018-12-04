@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using System;
+using System.Diagnostics;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class date : MonoBehaviour {
 
@@ -54,6 +57,32 @@ public class date : MonoBehaviour {
 	public void logout()
 	{
 		//terminate session/connection
+		state.Comm.SendTcpMessage("06");
+		
+		var start = Time.time;
+		Debug.Log("wait start time " + start + "s");
+			
+		var stopwatch = new Stopwatch();
+		stopwatch.Start();
+		while (!state.TerminateComm.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
+		{
+			Thread.Sleep(200);
+				
+			Debug.Log("written? " + state.TerminateComm.Written);
+			Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
+			if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
+			Debug.Log("timeout");
+		}
+		stopwatch.Stop();
+			
+		Debug.Log("response " + state.TerminateComm.Data);
+		if (state.TerminateComm.Data == "1")
+		{
+			state.TerminateComm.Written = false;
+				
+			SceneManager.LoadScene("Login");
+		}
+		Debug.Log("written? " + state.TerminateComm.Written);
 		
 		//link to login scene
 		SceneManager.LoadScene("Login");

@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class login : MonoBehaviour {
 	
@@ -14,55 +18,44 @@ public class login : MonoBehaviour {
 	public InputField Password;
 
 	//has to be initialized to a full array to enable the check to see if all the values have been supplied before submitting them
-	private string[] newEventData = {"", ""};
+	private readonly string[] _newEventData = {"", ""};
 	
-	private readonly Color badData = new Color(0.91f, 0.26f, 0.26f, 255);
-	private readonly Color goodData = new Color(1, 1, 1, 255);
+	private readonly Color _badData = new Color(0.91f, 0.26f, 0.26f, 255);
+	private readonly Color _goodData = new Color(1, 1, 1, 255);
 
-	private bool check_string(string val)
+	private static bool check_string(string val)
 	{
-		bool bad = true;
-		string[] vals = val.Split(' ');
-		
-		foreach (string p in vals)
-		{
-			if (p != "")
-			{
-				bad = false;
-				break;
-			}
-		}
+		var vals = val.Split(' ');
 
-		return bad;
+		// if any part of vals equals "" then the value is bad
+		return vals.All(p => p == "");
 	}
 
 	//should be used by the UsernameField
 	public void username_input()
 	{
-		string val = Username.text;
+		var val = Username.text;
 		
 		//if unusable
-		if (check_string(val))
-			Username.GetComponent<Image>().color = badData;
+		if (check_string(val)) Username.GetComponent<Image>().color = _badData;
 		else
 		{
-			Username.GetComponent<Image>().color = goodData;
-			newEventData[0] = val;
+			Username.GetComponent<Image>().color = _goodData;
+			_newEventData[0] = val;
 		}
 	}
 	
 	//should be used by the PasswordField
 	public void password_input()
 	{
-		string val = Password.text;
+		var val = Password.text;
 		
 		//if unusable
-		if (check_string(val))
-			Password.GetComponent<Image>().color = badData;
+		if (check_string(val)) Password.GetComponent<Image>().color = _badData;
 		else
 		{
-			Password.GetComponent<Image>().color = goodData;
-			newEventData[1] = val;
+			Password.GetComponent<Image>().color = _goodData;
+			_newEventData[1] = val;
 		}
 	}
 	
@@ -70,49 +63,53 @@ public class login : MonoBehaviour {
 	public void loggin()
 	{
 		//if all values have been supplied
-		if (ArrayUtility.IndexOf(newEventData, "") == -1)
+		if (ArrayUtility.IndexOf(_newEventData, "") == -1)
 		{
-			// send newEventData to database with
-			state.Comm.RequestLoginAuth(newEventData[0], newEventData[1]);
-
-			float t = 0;
-			while (t < state.Timeout && !state.RequestLoginAuth.written)
+			// send newEventData to database
+			state.Comm.SendTcpMessage("01," + _newEventData[0] + "," + _newEventData[1]);
+		
+			Debug.Log("message sent");
+			
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			while (!state.RequestLoginAuth.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
 			{
-				t += Time.deltaTime;
+				Thread.Sleep(200);
+				
+				Debug.Log("written? " + state.RequestLoginAuth.Written);
+				Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
+				if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
+				Debug.Log("timeout");
 			}
-
-			if (state.RequestLoginAuth.written)
+			stopwatch.Stop();
+			
+			Debug.Log("response " + state.RequestLoginAuth.Data);
+			Debug.Log("Written? " + state.RequestLoginAuth.Written);
+			if (!state.RequestLoginAuth.Written) return;
+			if (state.RequestLoginAuth.Data == "1")
 			{
-				if (state.RequestLoginAuth.data == "1")
-				{
-					state.RequestLoginAuth.written = false;
+				state.RequestLoginAuth.Written = false;
 					
-					Password.GetComponent<Image>().color = goodData;
-					Username.GetComponent<Image>().color = goodData;
+				Password.GetComponent<Image>().color = _goodData;
+				Username.GetComponent<Image>().color = _goodData;
 
-					SceneManager.LoadScene("CalendarView");
-				}
-				else
-				{
-					Username.GetComponent<Image>().color = badData;
-					Password.GetComponent<Image>().color = badData;
-				}
+				SceneManager.LoadScene("CalendarView");
 			}
+			else
+			{
+				Username.GetComponent<Image>().color = _badData;
+				Password.GetComponent<Image>().color = _badData;
+			}
+			Debug.Log("written? " + state.SendNewUser.Written);
 		}
 		else
 		{
-			if (newEventData[0] == "")
-			{
-				Username.GetComponent<Image>().color = badData;
-			}
+			if (_newEventData[0] == "") Username.GetComponent<Image>().color = _badData;
 
-			if (newEventData[1] == "")
-			{
-				Password.GetComponent<Image>().color = badData;
-			}
+			if (_newEventData[1] == "") Password.GetComponent<Image>().color = _badData;
 		}
 		
-		// for bypassing the network
+		// for bypassing the networking stuff
 		//SceneManager.LoadScene("CalendarView");
 	}
 
@@ -122,8 +119,16 @@ public class login : MonoBehaviour {
 		SceneManager.LoadScene("CreateAccount");
 	}
 
-	void Start()
+	private void Start()
 	{
+		Debug.Log("Login scene started");
+		Debug.Log(state.Connected);
+		
+		if (state.Connected) return;
+		Debug.Log("inside if");
 		state.Comm.Connect();
+		Debug.Log("called connect");
+		state.Connected = true;
+		Debug.Log(state.Connected);
 	}
 }

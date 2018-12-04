@@ -16,3 +16,6 @@
  - send new user
 	- send "05" + username + password (2+1+20+1+20 = 44 bytes)
 	- reply "55" + <"1" for success, "-1" for failure> (4 bytes)
+ - terminate connection
+	- send "06" (2 bytes)
+	- reply "56" + <"1" for success, "-1" for failure> (4 bytes)
