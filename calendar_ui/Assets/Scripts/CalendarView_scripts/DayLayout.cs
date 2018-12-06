@@ -104,7 +104,7 @@ public class DayLayout : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 		//get startDate from date.cs
-		DateObj.DateObject temp = DateText.GetComponent<date>().display_date;
+		DateObj.DateObject temp = DateText.GetComponent<date>().DisplayDate;
 
 		if (temp != startDate)
 		{
@@ -121,7 +121,7 @@ public class DayLayout : MonoBehaviour
 
 
 			//update position of "today" marker
-			today = DateText.GetComponent<date>().today;
+			today = DateText.GetComponent<date>().Today;
 			int x_pos = (today < startDate || today > startDate + new DateObj.DateObject(0, 0, 7))
 				? -2 : (today.day_of_the_week() - 1);
 			gameObject.transform.Find("Today").transform.position = new Vector3(310f + x_pos * 388, 1222, 0);

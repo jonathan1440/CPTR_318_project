@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,21 +20,13 @@ public class login : MonoBehaviour {
 	private readonly Color _badData = new Color(0.91f, 0.26f, 0.26f, 255);
 	private readonly Color _goodData = new Color(1, 1, 1, 255);
 
-	private static bool check_string(string val)
-	{
-		var vals = val.Split(' ');
-
-		// if any part of vals equals "" then the value is bad
-		return vals.All(p => p == "");
-	}
-
 	//should be used by the UsernameField
 	public void username_input()
 	{
 		var val = Username.text;
 		
 		//if unusable
-		if (check_string(val)) Username.GetComponent<Image>().color = _badData;
+		if (string.IsNullOrWhiteSpace(val)) Username.GetComponent<Image>().color = _badData;
 		else
 		{
 			Username.GetComponent<Image>().color = _goodData;
@@ -51,7 +40,7 @@ public class login : MonoBehaviour {
 		var val = Password.text;
 		
 		//if unusable
-		if (check_string(val)) Password.GetComponent<Image>().color = _badData;
+		if (string.IsNullOrWhiteSpace(val)) Password.GetComponent<Image>().color = _badData;
 		else
 		{
 			Password.GetComponent<Image>().color = _goodData;
@@ -66,27 +55,9 @@ public class login : MonoBehaviour {
 		if (ArrayUtility.IndexOf(_newEventData, "") == -1)
 		{
 			// send newEventData to database
-			state.Comm.SendTcpMessage("01," + _newEventData[0] + "," + _newEventData[1]);
-		
-			Debug.Log("message sent");
 			
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			while (!state.RequestLoginAuth.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
-			{
-				Thread.Sleep(200);
-				
-				Debug.Log("written? " + state.RequestLoginAuth.Written);
-				Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
-				if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
-				Debug.Log("timeout");
-			}
-			stopwatch.Stop();
 			
-			Debug.Log("response " + state.RequestLoginAuth.Data);
-			Debug.Log("Written? " + state.RequestLoginAuth.Written);
-			if (!state.RequestLoginAuth.Written) return;
-			if (state.RequestLoginAuth.Data == "1")
+			if (ClientComms.SendLoginRequest(_newEventData[0], _newEventData[1]))
 			{
 				state.RequestLoginAuth.Written = false;
 					
@@ -95,12 +66,11 @@ public class login : MonoBehaviour {
 
 				SceneManager.LoadScene("CalendarView");
 			}
-			else
+			else if(!ClientComms.SendLoginRequest(_newEventData[0], _newEventData[1]))
 			{
 				Username.GetComponent<Image>().color = _badData;
 				Password.GetComponent<Image>().color = _badData;
 			}
-			Debug.Log("written? " + state.SendNewUser.Written);
 		}
 		else
 		{
@@ -119,10 +89,9 @@ public class login : MonoBehaviour {
 		SceneManager.LoadScene("CreateAccount");
 	}
 
-	private void Start()
+	private void Update()
 	{
-		Debug.Log("Login scene started");
-		Debug.Log(state.Connected);
+		
 		
 		if (state.Connected) return;
 		Debug.Log("inside if");

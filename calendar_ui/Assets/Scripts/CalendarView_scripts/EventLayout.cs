@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,7 +19,6 @@ public class EventLayout : MonoBehaviour
 	
 	private DateObj.DateObject startDate = new DateObj.DateObject(0,0,0);
 
-	private List<Dictionary<string, object>> events;
 	private List<Dictionary<string, object>> displayable_events;
 	
 	//should be set to the Background sprite
@@ -43,45 +41,13 @@ public class EventLayout : MonoBehaviour
 	{
 		displayable_events.Clear();
 		
-		//get hardcoded events
-		foreach (var e in events)
-		{
-			var endDate = startDate + new DateObj.DateObject(0, 0, 7);
-			var date = e["date"].ToString().Split('/');
-			var tday = new DateObj.DateObject(int.Parse(date[2]), int.Parse(date[0]), int.Parse(date[1]));
-			
-			if (tday >= startDate && tday < endDate) displayable_events.Add(e);
-		}
-		
 		//get database events
-		state.Comm.SendTcpMessage("02," + startDate.ToString("m:d:y") + "," + (startDate + new DateObj.DateObject(0,0,7)).ToString("m:d:y"));
-
-		var stopwatch = new Stopwatch();
-		stopwatch.Start();
-		while (!state.displayable_events.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
-		{
-			Thread.Sleep(200);
-				
-			Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
-			if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
-			Debug.Log("timeout");
-		}
-		stopwatch.Stop();
+		if (!ClientComms.SendEventRequest(startDate.ToString("m:d:y"),
+			(startDate + new DateObj.DateObject(0, 0, 7)).ToString("m:d:y"))) return;
 		
-		if (state.displayable_events.Written)
-		{
-			foreach (var evnt in state.displayable_events.Data)
-			{
-				Debug.Log("retrieved " + evnt["title"] +" from state.displayable_events.Data");
-				displayable_events.Add(evnt);
-				Debug.Log("added " + displayable_events[displayable_events.Count - 1]["title"] + "to list to be displayed");
-			}
+		foreach (var evnt in state.displayable_events.Data) displayable_events.Add(evnt);
 			
-			Debug.Log("added events");
-			
-			state.displayable_events.Written = false;
-		}
-		else Debug.Log("RequestEventRange timeout");
+		state.displayable_events.Written = false;
 	}
 
 	// returns duration in pixels
@@ -90,6 +56,7 @@ public class EventLayout : MonoBehaviour
 		var ss = start.Split(':');
 		var es = end.Split(':');
 
+		Debug.Log(ss[0]);
 		float shour = int.Parse(ss[0]);
 		var smin = int.Parse(ss[1].Substring(0,2));
 		var shal = ss[1][2];
@@ -278,13 +245,12 @@ public class EventLayout : MonoBehaviour
 	
 	// Use this for initialization
 	private void Start () {
-		events = CSVReader.Read("events");
 		displayable_events = new List<Dictionary<string, object>>();
 	}
 	
 	// Update is called once per frame
 	private void Update () {
-		var temp = DateText.GetComponent<date>().display_date;
+		var temp = DateText.GetComponent<date>().DisplayDate;
 
 		if (temp == startDate && Time.frameCount >= 10) return;
 		startDate = temp;

@@ -1,44 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using System.Diagnostics;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 public class date : MonoBehaviour {
 
 	//display date
-	public int day;
-	public int month;
-	public int year;
+	public int Day;
+	public int Month;
+	public int Year;
 
-	public DateObj.DateObject today;
+	public DateObj.DateObject Today;
 	
 	//the first day of the week currently being displayed
-	public DateObj.DateObject display_date;
+	public DateObj.DateObject DisplayDate;
 	
 	//used for last week button
 	public void last_week()
 	{
-		display_date -= new DateObj.DateObject(0, 0, 7);
+		DisplayDate -= new DateObj.DateObject(0, 0, 7);
 	}
 	
 	//used for next week button
 	public void next_week()
 	{
-		display_date += new DateObj.DateObject(0, 0, 7);
+		DisplayDate += new DateObj.DateObject(0, 0, 7);
 	}
 
 	//used for this week button
 	public void this_week()
 	{
-		display_date = today.week_start();
+		DisplayDate = Today.week_start();
 	}
 	
 	//used by the Create event button
@@ -57,70 +49,41 @@ public class date : MonoBehaviour {
 	public void logout()
 	{
 		//terminate session/connection
-		state.Comm.SendTcpMessage("06");
+		if (!ClientComms.SendLogout()) return;
 		
-		var start = Time.time;
-		Debug.Log("wait start time " + start + "s");
+		state.TerminateComm.Written = false;
 			
-		var stopwatch = new Stopwatch();
-		stopwatch.Start();
-		while (!state.TerminateComm.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
-		{
-			Thread.Sleep(200);
-				
-			Debug.Log("written? " + state.TerminateComm.Written);
-			Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
-			if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
-			Debug.Log("timeout");
-		}
-		stopwatch.Stop();
-			
-		Debug.Log("response " + state.TerminateComm.Data);
-		if (state.TerminateComm.Data == "1")
-		{
-			state.TerminateComm.Written = false;
-				
-			SceneManager.LoadScene("Login");
-		}
-		Debug.Log("written? " + state.TerminateComm.Written);
-		
-		//link to login scene
 		SceneManager.LoadScene("Login");
 	}
 	
 	
 	// Use this for initialization
-	void Start ()
+	private void Start ()
 	{
-		DateTime ct = DateTime.Now;
+		var ct = DateTime.Now;
 		
 		//allow today to be set by the user for simulation/testing purposes
-		if (year != 0 && month != 0 && day != 0)
-			today = new DateObj.DateObject(year, month, day);
-		else
-			today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
+		if (Year != 0 && Month != 0 && Day != 0) Today = new DateObj.DateObject(Year, Month, Day);
+		else Today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
 		
-		display_date = today.week_start();
+		DisplayDate = Today.week_start();
 
-		GetComponent<Text>().text = today.ToString("d:M:Y");
+		GetComponent<Text>().text = Today.ToString("d:M:Y");
 
 		this_week();
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	private void Update ()
 	{
 		//check to see if it's a new day yet
-		DateTime ct = DateTime.Now;
+		var ct = DateTime.Now;
+
+		if (ct.Year == Today.year && ct.Month == Today.month && ct.Day == Today.day) return;
 		
-		if (ct.Year != today.year || ct.Month != today.month || ct.Day != today.day)
-		{
-			if (year != 0 && month != 0 && day != 0)
-				today = new DateObj.DateObject(year, month, day);
-			else
-				today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
+		if (Year != 0 && Month != 0 && Day != 0) Today = new DateObj.DateObject(Year, Month, Day);
+		else Today = new DateObj.DateObject(ct.Year, ct.Month, ct.Day);
 			
-			GetComponent<Text>().text = today.ToString("d:M:Y");
-		}
+		GetComponent<Text>().text = Today.ToString("d:M:Y");
 	}
 }

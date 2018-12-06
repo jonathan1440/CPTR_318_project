@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
@@ -190,28 +188,13 @@ public class SaveEvent : MonoBehaviour
 
 			if (shour <= ehour)
 			{
-				// send newEventData to to database with protocol
-
 				// if editing an event, instead of adding a new one
 				if (state.Title != "Title")
 				{
 					// send data back with signal that it was edited
-					state.Comm.SendTcpMessage("04,a," + _original[0]+ "," + _original[1]+ "," + _original[2]+ "," + _original[3]);
-					state.Comm.SendTcpMessage("04,b," + _newEventData[0] + "," + _newEventData[1] + "," + _newEventData[2] + "," + _newEventData[3]);
+					state.Comm.SendPreEditEvent(_original[0], _original[1], _original[2], _original[3]);
 					
-					var stopwatch = new Stopwatch();
-					stopwatch.Start();
-					while (!state.SendEditedEvent.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
-					{
-						Thread.Sleep(200);
-				
-						Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
-						if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
-						Debug.Log("timeout");
-					}
-					stopwatch.Stop();
-
-					if (!state.SendEditedEvent.Written || state.SendEditedEvent.Data != "1") return;
+					if (!ClientComms.SendPostEditEvent(_newEventData[0], _newEventData[1], _newEventData[2], _newEventData[3])) return;
 					
 					state.SendEditedEvent.Written = false;
 					SceneManager.LoadScene("CalendarView");
@@ -219,28 +202,11 @@ public class SaveEvent : MonoBehaviour
 				else
 				{
 					//send back normal data
-					state.Comm.SendTcpMessage("03," + _newEventData[0] + "," + _newEventData[1]+ "," + _newEventData[2]+ "," + _newEventData[3]);
-
-					var stopwatch = new Stopwatch();
-					stopwatch.Start();
-					while (!state.SendNewEvent.Written && stopwatch.ElapsedMilliseconds < state.Timeout)
-					{
-						Thread.Sleep(200);
-				
-						Debug.Log("waiting for write for " + stopwatch.ElapsedMilliseconds);
-						if (stopwatch.ElapsedMilliseconds < state.Timeout) continue;
-						Debug.Log("timeout");
-					}
-					stopwatch.Stop();
-
-					if (!state.SendNewEvent.Written || state.SendNewEvent.Data != "1") return;
+					if (!ClientComms.SendNewEvent(_newEventData[0], _newEventData[1], _newEventData[2], _newEventData[3])) return;
 					
 					state.SendNewEvent.Written = false;
 					SceneManager.LoadScene("CalendarView");
 				}
-				
-				// for bypassing the networking stuff
-				//SceneManager.LoadScene("CalendarView");
 			}
 			else
 			{
