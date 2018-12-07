@@ -59,6 +59,8 @@ public class ServerComms : MonoBehaviour
         Debug.Log("got events");
 
         load_data = false;
+
+        foreach (var user in Users) Debug.Log(user["username"].ToString() + ", " + user["password"].ToString());
     }
 	
 	public string FindUser(string username, string password)
@@ -66,6 +68,8 @@ public class ServerComms : MonoBehaviour
 		int i = 0;
 		while (i < Users.Count)
 		{
+            Debug.Log(Users[i]["username"].ToString() + ", " + Users[i]["password"].ToString());
+
             if (Users[i]["username"].ToString() == username && Users[i]["password"].ToString() == password) return (i + 1).ToString();
 
 			i++;
@@ -96,10 +100,14 @@ public class ServerComms : MonoBehaviour
 
             File.WriteAllText(@"Assets\Resources\users.csv", csv.ToString());
 
+            load_data = true;
+
             Debug.Log("Users recorded");
 
             return 1;
 		}
+
+        foreach (var user1 in Users) Debug.Log(user1["username"].ToString() + ", " + user1["password"].ToString());
 
         Debug.Log("user not added");
 		return -1;
@@ -110,8 +118,10 @@ public class ServerComms : MonoBehaviour
 		int i = 0;
 		while (i < Events.Count)
 		{
+            //Debug.Log(Events[i]["title"].ToString() + ", " + Events[i]["date"].ToString() + ", " + Events[i]["start time"].ToString() + ", " + Events[i]["end time"].ToString() + ", " + );
+            //Debug.Log(title + ", " + date + ", " + start_time + ", " + end_time + ", " + current_user);
 			if(Events[i]["title"].ToString() == title && Events[i]["date"].ToString() == date && Events[i]["start time"].ToString() == start_time &&
-               Events[i]["end time"].ToString() == end_time && Events[i]["user"] == current_user)
+               Events[i]["end time"].ToString() == end_time && Events[i]["user"].ToString() == current_user)
 				return i;
 			
 			i++;
@@ -122,7 +132,9 @@ public class ServerComms : MonoBehaviour
 
 	public int EditEvent(string title1, string date1, string start_time1, string end_time1, string title2, string date2, string start_time2, string end_time2)
 	{
-		int i = FindEvent(title1, date1, start_time1, end_time1);
+        Debug.Log(title1 + ", " + date1 + ", " + start_time1 + ", " + end_time1);
+        Debug.Log(title2 + ", " + date2 + ", " + start_time2 + ", " + end_time2);
+        int i = FindEvent(title1, date1, start_time1, end_time1);
 
 		if (i == -1)
 		{
@@ -304,6 +316,8 @@ public class ServerComms : MonoBehaviour
 								stor[1] = strArr[2];
 								stor[2] = strArr[3];
 								stor[3] = strArr[4];
+
+                                Debug.Log(stor[0] + ", " + stor[1] + ", " + stor[2] + ", " + stor[3]);
                                 break;
 
                             case MessageType.PostEditEvent:
